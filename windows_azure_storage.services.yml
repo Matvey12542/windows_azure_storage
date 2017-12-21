@@ -1,0 +1,5 @@
+services:
+  windows_azure_storage.stream_wrapper:
+    class: Drupal\windows_azure_storage\StreamWrapper\WindowsAzureStorageStreamWrapper
+    tags:
+      - { name: stream_wrapper, scheme: windowsazurestorage }

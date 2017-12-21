@@ -1,0 +1,9 @@
+windows_azure_storage.configuration_form:
+  title: Windows Azure Storage Configuration
+  route_name: windows_azure_storage_configuration
+  base_route: windows_azure_storage_configuration
+
+windows_azure_storage.files_list:
+  title: List the files in a container
+  route_name: windows_azure_storage_list_the_files_query_parameters
+  base_route: windows_azure_storage_configuration

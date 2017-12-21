@@ -1,0 +1,32 @@
+<?php
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ * 
+ * Displays help and module information.
+ * 
+ * @param $route_name
+ *   Which path of the site we're using to display help
+ * @param $route_match
+ *   Array that holds the current path as returned from arg() function
+ * 
+ * @return array
+ */
+function windows_azure_storage_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.windows_azure_storage':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('The Windows Azure Storage module allows for files to be uploaded to the Windows Azure storage service.') . '</p>';
+      $output .= '<h3>' . t('Instructions') . '</h3>';
+      $output .= '<dl>';
+      $output .= '<dt>' . t('Adding a custom blob stream') . '</dt>';
+      $output .= '<dd>' . t('Configuration > Media > Windows Azure Storage > Add new confiruration') . '</dd>';
+      $output .= '<dt>' . t('Setting the upload destination of content type fields') . '</dt>';
+      $output .= '<dd>' . t('Configuration > Text formarts and editors > Full Html > Configure > CKEditor plugin settings > File storage > Choose Windows Azure Storage') . '</dd>';
+      $output .= '</dl>';
+      return $output;
+  }
+} 
+?>

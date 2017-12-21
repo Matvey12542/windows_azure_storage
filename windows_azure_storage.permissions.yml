@@ -1,0 +1,8 @@
+administer windows_azure_storage:
+  description: 'Administer windows_azure_storage File System.'
+  title: 'Administer windows_azure_storage File System.'
+  restrict access: TRUE
+'read private files':
+  title:  See private files in the File Example module demo.
+'read temporary files':
+  title:  See temporary files in the File Example module demo.

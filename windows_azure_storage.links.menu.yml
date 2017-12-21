@@ -1,0 +1,6 @@
+windows_azure_storage:
+  title: 'Windows Azure Storage'
+  description: 'Handles storage of files on Windows Azure Storage.'
+  parent: system.admin_config_media
+  route_name: windows_azure_storage_configuration
+  weight: 100

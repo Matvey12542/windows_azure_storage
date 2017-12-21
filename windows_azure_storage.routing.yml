@@ -1,0 +1,26 @@
+windows_azure_storage_configuration:
+  path: '/admin/config/media/windows_azure_storage/configuration'
+  defaults:
+    _form: '\Drupal\windows_azure_storage\Form\WindowsAzureStorageConfigurationForm'
+    _title: 'Windows Azure Storage Configuration'
+  requirements:
+    _permission: 'administer site configuration'
+
+windows_azure_storage_delete_file:
+  path: '/admin/config/media/windows_azure_storage/azure_storage_blob_delete_file/{id}/{container}/{folder}/{file_name}/delete'
+  defaults:
+    _form: '\Drupal\windows_azure_storage\Form\WindowsAzureStorageDeleteFileForm'
+    _title: 'Delete file from Windows Azure Storage'
+  requirements:
+    _permission: 'administer site configuration'
+    
+windows_azure_storage_list_the_files_query_parameters:
+  path: '/admin/config/media/windows_azure_storage/file/list/pager'
+  defaults:
+    _title: 'Pager using query parameters for testing'
+    _controller: '\Drupal\windows_azure_storage\Controller\WindowsAzureStoragePagerController::queryParameters'
+  requirements:
+    _access: 'TRUE'
+
+
+      
