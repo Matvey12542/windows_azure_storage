@@ -22,5 +22,17 @@ windows_azure_storage_list_the_files_query_parameters:
   requirements:
     _access: 'TRUE'
 
+windows_azure_storage.generate:
+  path: '/azure/generate/{image_style}/{scheme}'
+  defaults:
+    _controller: '\Drupal\windows_azure_storage\Controller\WindowsAzureStoragePagerController::generate'
+  requirements:
+    _access: 'TRUE'
 
-      
+windows_azure_storage.file_download:
+  path: /wa-file/{file}/download
+  defaults:
+    _controller: '\Drupal\windows_azure_storage\Controller\WindowsAzureStoragePagerController::download'
+    _title: 'Download file'
+  requirements:
+    _entity_access: 'file.download'

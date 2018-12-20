@@ -6,153 +6,90 @@
  * 
  * @author DylanLi
  */
- 
- /**
+
+use Drupal\Core\Database\Database;
+
+/**
  * Implements hook_schema().
  */
- 
- function windows_azure_storage_schema() {
-  $schema = array();
-  $schema['windows_azure_storage'] = array(
-    'description' => 'Contains exportable Windows Azure Storage configurations.',
-    'export' => array(
-      'identifier' => 'windows_azure_storage',
-      'bulk export' => TRUE,
-      'primary key' => 'id',
-      'api' => array(
-        'owner' => 'windows_azure_storage',
-        'api' => 'default_azure_storage_blob',
-        'minimum_version' => 1,
-        'current_version' => 1,
-      ),
-    ),
-    'fields' => array(
-      'id' => array(
-        'type' => 'serial',
+
+function windows_azure_storage_schema() {
+  $schema = [];
+
+  $schema['windows_azure_storage_file'] = [
+    'fields'      => [
+      'id'        => [
+        'type'        => 'serial',
         'description' => 'A database primary key to ensure uniqueness',
-        'not null' => TRUE,
-        'no export' => TRUE,
-      ),
-      'name' => array(
-        'type' => 'varchar',
-        'length' => '50',
-        'description' => 'Unique ID for this configuration. Used to identify it programmatically.',
-      ),
-      'account' => array(
-        'type' => 'varchar',
-        'length' => '50',
-        'description' => 'Name of the Windows Azure Storage account.',
-      ),
-      'primary_key' => array(
-        'type' => 'varchar',
-        'length' => '100',
-        'description' => 'Primary access key of the Windows Azure Storage account.',
-      ),
-      'blob_container' => array(
-        'type' => 'varchar',
-        'length' => '50',
-        'description' => 'Name of the container to use.',
-      ),
-    ),
-    'primary key' => array('id'),
-  );
-  
-  $schema['windows_azure_storage_file'] = array(
-    'fields' => array(
-      'id' => array(
-        'type' => 'serial',
-        'description' => 'A database primary key to ensure uniqueness',
-        'not null' => TRUE,
-      ),
-      'container' => array(
-        'type' => 'varchar',
-  		  'length' => '50',
+        'not null'    => TRUE,
+      ],
+      'container' => [
+        'type'        => 'varchar',
+        'length'      => '50',
         'description' => 'Windows Azure storage container.',
-      ),
-    	'folder' => array(
-        'type' => 'varchar',
-        'length' => '50',
+      ],
+      'folder'    => [
+        'type'        => 'varchar',
+        'length'      => '50',
         'description' => 'Windows Azure storage container folder.',
-      ),
-    	'name' => array(
-        'type' => 'varchar',
-    		'length' => '50',
-    		'description' => 'Windows Azure storage file name.',
-    	),
-    	'url' => array(
-        'type' => 'varchar',
-    		'length' => '150',
-    		'description' => 'Windows Azure storage file url.',
-    	),
-  	),
-  	'primary key' => array('id'),
-  );
+      ],
+      'name'      => [
+        'type'        => 'varchar',
+        'length'      => '50',
+        'description' => 'Windows Azure storage file name.',
+      ],
+      'url'       => [
+        'type'        => 'varchar',
+        'length'      => '255',
+        'description' => 'Windows Azure storage file url.',
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
 
   return $schema;
 }
 
 
-
 /**
  * Implements hook_requirements().
- * 
+ *
  * Checks for dependencies before installation.
- * 
+ *
  * @param string $phase
  *   The phase in which requirements are checked:
  *   - install: The module is being installed
  *   - update: The module is enabled and update.php is run
- *   - runtime: The runtime requirements are being checked and shown on the status report page
- * 
+ *   - runtime: The runtime requirements are being checked and shown on the
+ *   status report page
+ *
  * @return array
  *   An associative array where the keys are arbitrary but must be unique
  */
 function windows_azure_storage_requirements($phase) {
-  if ($phase === 'install')
-  {
-    $requirements = array();
-    
+  if ($phase === 'install') {
+    $requirements = [];
+
     if (!ini_get('allow_url_fopen')) {
-      $requirements['windows_azure_storage'] = array(
-          'title' => 'PHP setting for allow_url_fopen is Off',
-          'description' => 'The Windows Azure SDK for PHP requires the PHP configuration setting "allow_url_fopen" to be On.',
-          'severity' => REQUIREMENT_ERROR,
-      );
-      
+      $requirements['windows_azure_storage'] = [
+        'title' => 'PHP setting for allow_url_fopen is Off',
+        'description' => 'The Windows Azure SDK for PHP requires the PHP configuration setting "allow_url_fopen" to be On.',
+        'severity' => REQUIREMENT_ERROR,
+      ];
+
       return $requirements;
     }
-    
-    $module_path = drupal_get_path('module', 'windows_azure_storage');
-    
-    if (!is_file($module_path . '/lib/vendor/autoload.php')) {
-      $output = array();
-      $exit_code = 0;
-
-      // Prevent timeout
-      drupal_set_time_limit(0);
-
-      // Store current working directory
-      $cwd = getcwd();
-      // Change to directory of the composer.json file
-      chdir($module_path . '/lib');
-      // http://jamieonsoftware.com/journal/tag/composer
-      // Composer requires allow_url_fopen so set the runtime config
-      exec('php.exe -d allow_url_fopen=1 composer.phar install', $output, $exit_code);
-      // Restore current working directory
-      chdir($cwd);
-
-      // Ensure the required libraries have been downloaded or exist
-      if ($exit_code !== 0) {
-        // Execute will also fail if PHP is not set in the environment variable
-        $requirements['windows_azure_storage'] = array(
-            'title' => 'Missing PHP Client Libraries for Windows Azure',
-            'description' => 'Failed to download and install required libraries.',
-            'severity' => REQUIREMENT_ERROR,
-        );
-
-        return $requirements;
-      }
-    }
   }
-} 
-?>
+}
+
+/**
+ * Change {windows_azure_storage_file}.url length.
+ */
+function windows_azure_storage_update_8001() {
+  $schema = Database::getConnection()->schema();
+  $schema->changeField('windows_azure_storage_file', 'url', 'url', [
+    'type'  => 'varchar',
+    'length'  => '255',
+    'description' => 'Windows Azure storage file url.',
+  ]);
+}

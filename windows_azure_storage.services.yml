@@ -1,5 +1,14 @@
 services:
+  windows_azure_storage.storage_helper:
+    class: Drupal\windows_azure_storage\Common\WindowsAzureStorageHelper
+    arguments: ['@state', '@logger.factory']
   windows_azure_storage.stream_wrapper:
     class: Drupal\windows_azure_storage\StreamWrapper\WindowsAzureStorageStreamWrapper
+    arguments: ['@windows_azure_storage.storage_helper']
     tags:
       - { name: stream_wrapper, scheme: windowsazurestorage }
+  windows_azure_storage.image_styles:
+    class: Drupal\windows_azure_storage\PathProcessor\PathProcessorImageStyles
+    arguments: ['@stream_wrapper_manager']
+    tags:
+      - { name: path_processor_inbound, priority: 300 }

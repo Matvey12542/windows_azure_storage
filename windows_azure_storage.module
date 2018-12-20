@@ -3,15 +3,6 @@ use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
  * Implements hook_help().
- * 
- * Displays help and module information.
- * 
- * @param $route_name
- *   Which path of the site we're using to display help
- * @param $route_match
- *   Array that holds the current path as returned from arg() function
- * 
- * @return array
  */
 function windows_azure_storage_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
@@ -28,5 +19,4 @@ function windows_azure_storage_help($route_name, RouteMatchInterface $route_matc
       $output .= '</dl>';
       return $output;
   }
-} 
-?>
+}

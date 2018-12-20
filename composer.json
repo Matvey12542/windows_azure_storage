@@ -1,0 +1,15 @@
+{
+  "name": "drupal/windows_azure_storage",
+  "description": "Provides an easy integration with Microsoft Azure Storage services (blobs, tables, and queues).",
+  "type": "drupal-module",
+  "keywords": ["Drupal", "Azure"],
+  "homepage": "http://drupal.org/project/windows_azure_storage",
+  "license": "GPL-2.0+",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/windows_azure_storage",
+    "source": "http://cgit.drupalcode.org/windows_azure_storage"
+  },
+  "require": {
+    "microsoft/azure-storage-blob": "^1.2"
+  }
+}
