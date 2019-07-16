@@ -30,7 +30,7 @@ windows_azure_storage.generate:
     _access: 'TRUE'
 
 windows_azure_storage.file_download:
-  path: /wa-file/{file}/download
+  path: '/wa-file/{file}/download'
   defaults:
     _controller: '\Drupal\windows_azure_storage\Controller\WindowsAzureStoragePagerController::download'
     _title: 'Download file'

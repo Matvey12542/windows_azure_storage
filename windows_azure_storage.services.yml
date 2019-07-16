@@ -4,7 +4,7 @@ services:
     arguments: ['@state', '@logger.factory']
   windows_azure_storage.stream_wrapper:
     class: Drupal\windows_azure_storage\StreamWrapper\WindowsAzureStorageStreamWrapper
-    arguments: ['@windows_azure_storage.storage_helper']
+    arguments: ['@windows_azure_storage.storage_helper', '@file_system']
     tags:
       - { name: stream_wrapper, scheme: windowsazurestorage }
   windows_azure_storage.image_styles:

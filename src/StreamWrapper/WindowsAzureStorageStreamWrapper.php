@@ -2,6 +2,7 @@
 
 namespace Drupal\windows_azure_storage\StreamWrapper;
 
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 use Drupal\Core\Url;
 use Drupal\windows_azure_storage\Common\WindowsAzureStorageHelper;
@@ -49,13 +50,26 @@ class WindowsAzureStorageStreamWrapper implements StreamWrapperInterface {
   protected $azureHelper;
 
   /**
+   * The file system service.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
+
+  /**
    * Class constructor.
    *
+   * @param \Drupal\Core\File\FileSystemInterface $file_system
+   *   The file system service.
    * @param \Drupal\windows_azure_storage\Common\WindowsAzureStorageHelper $azure_storage_helper
    *   WindowsAzureStorageHelper.
    */
-  public function __construct(WindowsAzureStorageHelper $azure_storage_helper = NULL) {
+  public function __construct(FileSystemInterface $file_system, WindowsAzureStorageHelper $azure_storage_helper = NULL) {
+
+    // In some keys $azure_storage_helper initialized as NULL (ex. is_dir)
+    // so we should init helper manually.
     $this->azureHelper = $azure_storage_helper ?? \Drupal::service('windows_azure_storage.storage_helper');
+    $this->fileSystem = $file_system;
   }
 
   /**
@@ -128,8 +142,7 @@ class WindowsAzureStorageStreamWrapper implements StreamWrapperInterface {
    *   provide an implementation.
    */
   public function realpath() {
-    // @todo If called as temporary://, return a realpath?
-    return FALSE;
+    return trim($this->uri, '\/');
   }
 
   /**
@@ -255,7 +268,7 @@ class WindowsAzureStorageStreamWrapper implements StreamWrapperInterface {
     if (!empty($parts[1])) {
       // public:// file are all placed in the azure_folder.
       $public_folder = 'was-public';
-      if (\Drupal::service('file_system')->uriScheme($uri) == 'public') {
+      if ($this->fileSystem->uriScheme($uri) == 'public') {
         $parts[1] = "$public_folder/{$parts[1]}";
       }
     }
@@ -302,9 +315,11 @@ class WindowsAzureStorageStreamWrapper implements StreamWrapperInterface {
 
       // If read/append, fetch the file.
       if (!$this->writeMode || strpbrk($mode, 'ra+')) {
-        $this->tempFileHandle = $this->azureHelper
-          ->downloadBlob($this->azureHelper->getContainerName(),
-            $this->getFileName($converted));
+
+        $this->tempFileHandle = $this->azureHelper->downloadBlob(
+          $this->azureHelper->getContainerName(),
+          $this->getFileName($converted)
+        );
         $result = TRUE;
       }
       else {

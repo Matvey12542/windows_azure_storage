@@ -1,10 +1,23 @@
 <?php
+
+/**
+ * @file
+ * This is the module to create synchronization with windows azure storage.
+ */
+
 use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
  * Implements hook_help().
+ *
+ * @param string $route_name
+ *   The route name of the page.
+ * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+ *   The route match.
+ *
+ * @return string
  */
-function windows_azure_storage_help($route_name, RouteMatchInterface $route_match) {
+function windows_azure_storage_help(string $route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     case 'help.page.windows_azure_storage':
       $output = '';

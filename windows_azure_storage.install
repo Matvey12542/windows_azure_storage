@@ -17,30 +17,30 @@ function windows_azure_storage_schema() {
   $schema = [];
 
   $schema['windows_azure_storage_file'] = [
-    'fields'      => [
-      'id'        => [
-        'type'        => 'serial',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
         'description' => 'A database primary key to ensure uniqueness',
-        'not null'    => TRUE,
+        'not null' => TRUE,
       ],
       'container' => [
-        'type'        => 'varchar',
-        'length'      => '50',
+        'type' => 'varchar',
+        'length' => '50',
         'description' => 'Windows Azure storage container.',
       ],
-      'folder'    => [
-        'type'        => 'varchar',
-        'length'      => '50',
+      'folder' => [
+        'type' => 'varchar',
+        'length' => '50',
         'description' => 'Windows Azure storage container folder.',
       ],
-      'name'      => [
-        'type'        => 'varchar',
-        'length'      => '50',
+      'name' => [
+        'type' => 'varchar',
+        'length' => '50',
         'description' => 'Windows Azure storage file name.',
       ],
-      'url'       => [
-        'type'        => 'varchar',
-        'length'      => '255',
+      'url' => [
+        'type' => 'varchar',
+        'length' => '255',
         'description' => 'Windows Azure storage file url.',
       ],
     ],
